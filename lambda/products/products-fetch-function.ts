@@ -11,6 +11,7 @@ export async function handler(
   const {
     httpMethod,
     resource,
+    pathParameters,
     requestContext: { requestId: apiRequestId },
   } = event;
 
@@ -20,13 +21,22 @@ export async function handler(
 
   if (resource === "/products") {
     if (httpMethod === "GET") {
-      console.log("GET");
+      console.log(`${httpMethod} - ${resource}`);
 
       return {
-        body: JSON.stringify({ message: "Hello World" }),
+        body: JSON.stringify({ message: `${httpMethod} - ${resource}` }),
         statusCode: 200,
       };
     }
+  } else if (resource === "/products/{id}") {
+    console.log(`${httpMethod} - ${resource}`);
+
+    return {
+      body: JSON.stringify({
+        message: `${httpMethod} - ${resource}`,
+      }),
+      statusCode: 200,
+    };
   }
 
   return {

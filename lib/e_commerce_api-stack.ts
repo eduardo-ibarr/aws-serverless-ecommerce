@@ -11,6 +11,7 @@ import { Construct } from "constructs";
 
 interface ECommerceApiStackProps extends StackProps {
   productsFetchHandler: NodejsFunction;
+  productsAdminHandler: NodejsFunction;
 }
 
 export class ECommerceApiStack extends Stack {
@@ -31,8 +32,19 @@ export class ECommerceApiStack extends Stack {
       props.productsFetchHandler
     );
 
+    const productsAdminIntegration = new LambdaIntegration(
+      props.productsAdminHandler
+    );
+
     const productsResource = api.root.addResource("products");
 
+    const productIDResource = productsResource.addResource("{id}");
+
     productsResource.addMethod("GET", productsFetchIntegration);
+    productsResource.addMethod("POST", productsAdminIntegration);
+
+    productIDResource.addMethod("GET", productsFetchIntegration);
+    productIDResource.addMethod("PUT", productsAdminIntegration);
+    productIDResource.addMethod("DELETE", productsAdminIntegration);
   }
 }
