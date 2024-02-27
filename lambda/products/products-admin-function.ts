@@ -65,7 +65,7 @@ export async function handler(
     };
   }
 
-  const resourceMethods = operations[resource as Resources];
+  const resourceMethods = operations[<Resources>resource];
 
   if (!resourceMethods) {
     return {
@@ -76,7 +76,7 @@ export async function handler(
     };
   }
 
-  const methodHandler = resourceMethods[httpMethod as Methods];
+  const methodHandler = resourceMethods[<Methods>httpMethod];
 
   if (!methodHandler) {
     return {

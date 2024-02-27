@@ -1,8 +1,9 @@
-import { Runtime } from "aws-cdk-lib/aws-lambda";
+import { LayerVersion, Runtime } from "aws-cdk-lib/aws-lambda";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import { Duration, RemovalPolicy, Stack, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
+import { StringParameter } from "aws-cdk-lib/aws-ssm";
 
 export class ProductsAppStack extends Stack {
   readonly productsFetchHandler: NodejsFunction;
@@ -24,6 +25,17 @@ export class ProductsAppStack extends Stack {
       },
     });
 
+    const productsLayerArn = StringParameter.valueForStringParameter(
+      this,
+      "ProductsLayerVersionArn"
+    );
+
+    const productsLayer = LayerVersion.fromLayerVersionArn(
+      this,
+      "ProductLayerVersionArn",
+      productsLayerArn
+    );
+
     this.productsFetchHandler = new NodejsFunction(
       this,
       "ProductsFetchFunction",
@@ -41,6 +53,7 @@ export class ProductsAppStack extends Stack {
           minify: true,
           sourceMap: false,
         },
+        layers: [productsLayer],
       }
     );
 
@@ -63,6 +76,7 @@ export class ProductsAppStack extends Stack {
           minify: true,
           sourceMap: false,
         },
+        layers: [productsLayer],
       }
     );
 
