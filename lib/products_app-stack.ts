@@ -47,7 +47,7 @@ export class ProductsAppStack extends Stack {
         runtime: Runtime.NODEJS_20_X,
         timeout: Duration.seconds(5),
         environment: {
-          PRODUCTS_DYNAMODB: this.productsDynamoDB.tableName,
+          PRODUCTS_TABLE_NAME: this.productsDynamoDB.tableName,
         },
         bundling: {
           minify: true,
@@ -70,7 +70,7 @@ export class ProductsAppStack extends Stack {
         runtime: Runtime.NODEJS_20_X,
         timeout: Duration.seconds(5),
         environment: {
-          PRODUCTS_DYNAMODB: this.productsDynamoDB.tableName,
+          PRODUCTS_TABLE_NAME: this.productsDynamoDB.tableName,
         },
         bundling: {
           minify: true,
